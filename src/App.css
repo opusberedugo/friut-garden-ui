@@ -1,0 +1,101 @@
+/* #root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+} */
+
+
+@import "tailwindcss";
+
+@theme{
+/* Lime - Light/Bright Green from "FRUIT GARDEN" text (#78c230) */
+  --color-lime-50: #f8fbf4;
+  --color-lime-100: #eaf5df;
+  --color-lime-200: #cfe9b6;
+  --color-lime-300: #b4dd8d;
+  --color-lime-400: #99d163;
+  --color-lime-500: #78c230; /* Main color from logo text */
+  --color-lime-600: #609b26;
+  --color-lime-700: #48741c;
+  --color-lime-800: #365715;
+  --color-lime-900: #243a0e;
+  --color-lime-950: #12200a;
+
+  /* Mango - Golden Yellow/Orange from the mango fruit (#f4b11f) */
+  --color-mango-50: #fefbf3;
+  --color-mango-100: #fdf3dd;
+  --color-mango-200: #fbe3b0;
+  --color-mango-300: #f8d483;
+  --color-mango-400: #f6c457;
+  --color-mango-500: #f4b11f; /* Main color from mango fruit */
+  --color-mango-600: #c38d18;
+  --color-mango-700: #926a12;
+  --color-mango-800: #6d4f0d;
+  --color-mango-900: #493509;
+  --color-mango-950: #2b1f05;
+
+  /* Forest - Dark Green from the mango outline and branch */
+  --color-forest-50: #f3f6f4;
+  --color-forest-100: #dce4df;
+  --color-forest-200: #aec0b5;
+  --color-forest-300: #819d8c;
+  --color-forest-400: #537962;
+  --color-forest-500: #1a4d2e; /* Dark green outline/branch */
+  --color-forest-600: #143d24;
+  --color-forest-700: #0f2e1b;
+  --color-forest-800: #0b2214;
+  --color-forest-900: #07170d;
+  --color-forest-950: #040c07;
+
+  /* Complementary Neutrals */
+  --color-cream: #fefce8;
+  --color-sand: #fef3c7;
+  --color-stone: #78716c;
+  --color-earth: #57534e;
+
+ /* Custom Shadows */
+  --shadow-soft: 0 4px 20px -2px rgb(120 194 48 / 0.15);
+  --shadow-soft-lg: 0 10px 40px -5px rgb(120 194 48 / 0.2);
+  --shadow-glow: 0 0 20px rgb(244 177 31 / 0.3);
+  --shadow-mango: 0 8px 32px -4px rgb(244 177 31 / 0.25);
+  --shadow-lime: 0 8px 32px -4px rgb(120 194 48 / 0.25);
+  --shadow-forest: 0 8px 32px -4px rgb(26 77 46 / 0.25);
+
+}
