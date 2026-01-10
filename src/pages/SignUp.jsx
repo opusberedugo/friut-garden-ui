@@ -109,16 +109,30 @@ export default function SingUpPage({ }) {
   async function handleSubmit(e) {
     e.preventDefault()
     if (validateForm()) {
-      console.log('Form Submitted', formData)
-      const response = await fetch("http://localhost:3000/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      })
-      console.log(response)
-      // Proceed with submission logic usually here
+      try {
+        const response = await fetch("https://friut-garden-server-production.up.railway.app/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        })
+
+        const data = await response.json()
+
+        if (response.ok) {
+          console.log('Signup Successful', data)
+          // Store token if needed, e.g., localStorage.setItem('token', data.token)
+          alert("User created successfully!");
+          // Navigate to login or home
+        } else {
+          console.log('Signup Failed', data.message)
+          setErrors({ ...errors, apiError: data.message })
+          alert(data.message || "Signup failed");
+        }
+      } catch (error) {
+        console.error("Error submitting form:", error);
+      }
     } else {
       console.log('Validation Failed')
     }
