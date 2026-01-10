@@ -109,6 +109,7 @@ export default function SingUpPage({ }) {
   async function handleSubmit(e) {
     e.preventDefault()
     if (validateForm()) {
+      console.log(JSON.stringify(formData))
       try {
         const response = await fetch("https://friut-garden-server-production.up.railway.app/signup", {
           method: "POST",
