@@ -14,6 +14,8 @@ import FormGroup from '../components/forms/FormGroup'
 
 
 export default function SingUpPage({ }) {
+  const apiURL = import.meta.env.VITE_API
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -111,7 +113,7 @@ export default function SingUpPage({ }) {
     if (validateForm()) {
       console.log(JSON.stringify(formData))
       try {
-        const response = await fetch("https://friut-garden-server-production.up.railway.app/signup", {
+        const response = await fetch(apiURL + "/signup", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
