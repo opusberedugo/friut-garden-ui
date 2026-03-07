@@ -82,7 +82,7 @@ function LogInPage() {
             <Flex className="flex items-center space-x-2">
               <Image imgClass="w-40" src="logo.png" />
             </Flex>
-            <a href="#" className="text-sm text-gray-600 hover:text-gray-900">Create an account</a>
+            <a href="/signup  " className="text-sm text-gray-600 hover:text-gray-900">Create an account</a>
           </Flex>
 
 

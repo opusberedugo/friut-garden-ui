@@ -11,8 +11,8 @@ function App() {
 
   return (
     <>
-    {/* <LandingPage/> */}
-    <LogInPage/>
+    <LandingPage/>
+    {/* <LogInPage/> */}
     {/* <SingUpPage/> */}
     </>
     // <h1>Hello</h1>
