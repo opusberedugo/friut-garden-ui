@@ -14,7 +14,7 @@ import FormGroup from '../components/forms/FormGroup'
 
 
 export default function SingUpPage({ }) {
-  const apiURL = import.meta.env.VITE_API
+  const apiURL = import.meta.env.VITE_API_URL
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -69,7 +69,17 @@ export default function SingUpPage({ }) {
       newErrors.email = 'Email is invalid'
     }
 
-    if (!formData.phone) newErrors.phone = 'Phone number is required'
+    // Mauritian phone validation:
+    // Accepts: optional +230 or 230 prefix (with optional space/dash),
+    //          then 8-digit local number where first digit is 2,4,5,6,7,8,9
+    //          with optional space or dash between groups of 4 digits.
+    // Examples: 52345678 | 5234 5678 | +230 52345678 | +230 5234-5678 | 230 5234 5678
+    const mauritiusPhoneRegex = /^(\+?230[\s-]?)?[2456789]\d{3}[\s-]?\d{4}$/;
+    if (!formData.phone) {
+      newErrors.phone = 'Phone number is required'
+    } else if (!mauritiusPhoneRegex.test(formData.phone.trim())) {
+      newErrors.phone = 'Enter a valid Mauritian phone number (e.g. 5234 5678 or +230 5234 5678)'
+    }
 
     if (!formData.password) newErrors.password = 'Password is required'
     if (formData.password.length < 6) newErrors.password = 'Password must be at least 6 characters'
@@ -84,9 +94,9 @@ export default function SingUpPage({ }) {
     if (!formData.birthMonth) newErrors.birthMonth = 'Month is required'
     if (!formData.birthYear) newErrors.birthYear = 'Year is required'
 
-    // Basic date validity
-    if (formData.birthDay && (formData.birthDay < 1 || formData.birthDay > 31)) newErrors.birthDay = 'Invalid day'
-    if (formData.birthMonth && (formData.birthMonth < 1 || formData.birthMonth > 12)) newErrors.birthMonth = 'Invalid month'
+    // Basic date validity (parse to int to avoid string comparison bugs)
+    if (formData.birthDay && (parseInt(formData.birthDay) < 1 || parseInt(formData.birthDay) > 31)) newErrors.birthDay = 'Invalid day'
+    if (formData.birthMonth && (parseInt(formData.birthMonth) < 1 || parseInt(formData.birthMonth) > 12)) newErrors.birthMonth = 'Invalid month'
 
     // Age validation (18+)
     if (formData.birthDay && formData.birthMonth && formData.birthYear) {
@@ -155,8 +165,8 @@ export default function SingUpPage({ }) {
 
 
           <div class="mb-8">
-            <h1 class="text-3xl font-semibold text-gray-900 mb-2">Welcome back</h1>
-            <p class="text-gray-600">Enter your Untitled account details.</p>
+            <h1 class="text-3xl font-semibold text-gray-900 mb-2">Create Account</h1>
+            <p class="text-gray-600">Enter your details to create an account.</p>
           </div>
 
           <UIButton text="Sign Up with Google" onClick="" className="mb-4 w-full flex items-center justify-center space-x-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
@@ -286,6 +296,8 @@ export default function SingUpPage({ }) {
               error={errors.confirmPassword}
               onChange={handleChange}
             />
+            
+            
 
             <FormButton text="Sign Up" className="bg-forest-500 hover:bg-forest-600 transition-colors" />
           </Form>

@@ -18,6 +18,7 @@ export default function LandingPage(){
         announcement={{text:"Demo Announcement", href:"https://google.com"}}
         ctaPrimary={{text:"Demo Primary CTA"}}
         ctaSecondary={{text:"Demo Secondary CTA"}}
+        className="mt-8"
       />
 
       <Grid classes='grid-cols-4 gap-4 px-12 mt-12'>

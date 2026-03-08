@@ -5,10 +5,11 @@ export default function Hero({
   subtitle, // String: Subtitle text 
   ctaPrimary, // Object: { text, href } for the main CTA button
   ctaSecondary, // Object: { text, href } for the secondary CTA link
-  announcement // Object: { text, href } for the announcement banner (hidden if empty)
+  announcement, // Object: { text, href } for the announcement banner (hidden if empty)
+  className // String: Additional classes for the container
 }){
   return(
-    <div className="container px-12">
+    <div className={"container px-12 " + className}>
 
       
       <div className='bg-lime-100 p-6'>

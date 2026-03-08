@@ -4,7 +4,7 @@ import './App.css'
 import App from './App.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import LandingPage from './pages/LandingPage.jsx'
-
+import NewUserAuth from './pages/NewUserAuth.jsx'
 import SignUpPage from './pages/SignUp.jsx'
 
 const router = createBrowserRouter([
@@ -19,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: "/home/*",
     element: <LandingPage />,
+  },
+  {
+    path: "/new-user-authentication",
+    element: <NewUserAuth />
   },
 ])
 
