@@ -3,11 +3,19 @@ import Timeline from "../components/layout/Timeline";
 import Flex from "../components/layout/Flex";
 import Image from "../components/utility/Image";
 import Form from '../components/forms/Form'
-import FormField from "../components/forms/FormField";
 import Button from "../components/ui/Button";
 import Grid from "../components/layout/Grid";
+import OTPInput from "../components/forms/OTPInput";
 
 export default function NewUserAuth(){
+  const [otp, setOtp] = useState('')
+  const [otpError, setOtpError] = useState('')
+  const [otpComplete, setOtpComplete] = useState(false)
+
+  function handleOtpComplete(otp) {
+    setOtp(otp)
+    setOtpComplete(true)
+  }
 
   const [formData, setFormData] = useState({ email: '' })
   const [errors, setErrors] = useState({})
@@ -33,8 +41,8 @@ export default function NewUserAuth(){
       </Flex>
 
     <div class="mb-8">
-      <h1 class="text-3xl font-semibold text-gray-900 mb-2">New User Authentication</h1>
-      <p class="text-gray-600">Enter your details to create an account.</p>
+      <h1 class="text-3xl font-semibold text-gray-900 mb-2">Email Verification</h1>
+      <p class="text-gray-600">We want to be sure you are who you say you are.</p>
     </div>
 
       <Timeline showTrackBorder={false}
@@ -74,102 +82,41 @@ export default function NewUserAuth(){
       <Form className="w-full px-20">
 
         <div class="mb-8">
-          <h1 class="text-2xl font-semibold text-gray-900 mb-2">New User Authentication</h1>
-          <p class="text-gray-600">Enter your details to create an account.</p>
+          <h1 class="text-2xl font-semibold text-gray-900 mb-2">Check your mail</h1>
+          <p class="text-gray-600">We have sent a verification code to your email address.</p>
         </div>
 
-        <Grid classes="grid-cols-4 grid items-center gap-4 px-40">
-          <FormField
-            className="mb-4"
-            name="email"
-            type="email"
-            placeholder="Enter your email"
-            // label="Email"
-            // required
-            value={formData.email}
-            error={errors.email}
-            onChange={handleChange}
-          />
-          <FormField
-            className="mb-4"
-            name="email"
-            type="email"
-            placeholder="Enter your email"
-            // label="Email"
-            // required
-            value={formData.email}
-            error={errors.email}
-            onChange={handleChange}
-          />
-          <FormField
-            className="mb-4"
-            name="email"
-            type="email"
-            placeholder="Enter your email"
-            // label="Email"
-            // required
-            value={formData.email}
-            error={errors.email}
-            onChange={handleChange}
-          />
-          <FormField
-            className="mb-4"
-            name="email"
-            type="email"
-            placeholder="Enter your email"
-            // label="Email"
-            // required
-            value={formData.email}
-            error={errors.email}
-            onChange={handleChange}
-          />
-          <FormField
-            className="mb-4"
-            name="email"
-            type="email"
-            placeholder="Enter your email"
-            // label="Email"
-            // required
-            value={formData.email}
-            error={errors.email}
-            onChange={handleChange}
-          />
-          <FormField
-            className="mb-4"
-            name="email"
-            type="email"
-            placeholder="Enter your email"
-            // label="Email"
-            // required
-            value={formData.email}
-            error={errors.email}
-            onChange={handleChange}
-          />
-          <FormField
-            className="mb-4"
-            name="email"
-            type="email"
-            placeholder="Enter your email"
-            // label="Email"
-            // required
-            value={formData.email}
-            error={errors.email}
-            onChange={handleChange}
-          />
-          <FormField
-            className="mb-4"
-            name="email"
-            type="email"
-            placeholder="Enter your email"
-            // label="Email"
-            // required
-            value={formData.email}
-            error={errors.email}
-            onChange={handleChange}
+        <Grid classes="grid-cols-4 grid items-center gap-4 mb-8">
+          <OTPInput 
+            length={8}
+            value={otp}
+            onChange={setOtp}
+            onComplete={handleOtpComplete}
+            error={otpError}
           />
         </Grid>
-          <Button className="bg-forest-500 w-full text-white px-4 py-2 rounded-lg">Send OTP</Button>
+          <Button className="bg-forest-500 w-fit text-center text-white px-8 py-2 rounded-lg">Send OTP</Button>
       </Form>
+
+      
+      {/* <Form className="w-full px-20">
+
+        <div class="mb-8">
+          <h1 class="text-2xl font-semibold text-gray-900 mb-2">Check your Messages</h1>
+          <p class="text-gray-600">We have sent a verification code to your email address.</p>
+        </div>
+
+        <Grid classes="grid-cols-4 grid items-center gap-4 mb-8">
+          <OTPInput 
+            length={8}
+            value={otp}
+            onChange={setOtp}
+            onComplete={handleOtpComplete}
+            error={otpError}
+          />
+        </Grid>
+          <Button className="bg-forest-500 w-fit text-center text-white px-8 py-2 rounded-lg">Send OTP</Button>
+      </Form> */}
     </div>
   )
 }

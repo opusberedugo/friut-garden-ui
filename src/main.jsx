@@ -21,7 +21,7 @@ const router = createBrowserRouter([
     element: <LandingPage />,
   },
   {
-    path: "/new-user-authentication",
+    path: "/new-user-authentication/*",
     element: <NewUserAuth />
   },
 ])
