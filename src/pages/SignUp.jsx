@@ -11,6 +11,9 @@ import Checkbox from '../components/forms/Checkbox'
 import UIButton from '../components/ui/Button'
 import Flex from '../components/layout/Flex'
 import FormGroup from '../components/forms/FormGroup'
+import Alert from '../components/feedback/Alert'
+import Toast from '../components/feedback/Toast'
+
 
 
 export default function SingUpPage({ }) {
@@ -29,6 +32,21 @@ export default function SingUpPage({ }) {
   })
 
   const [errors, setErrors] = useState({})
+
+  const [alertState, setAlertState] = useState({ open: false, variant: 'info', title: '', message: '' })
+  const [toastState, setToastState] = useState({ open: false, variant: 'success', message: '' })
+
+  function showAlert(variant, title, message) {
+    setAlertState({ open: true, variant, title, message })
+  }
+
+  function hideAlert() {
+    setAlertState(prev => ({ ...prev, open: false }))
+  }
+
+  function showToast(variant, message) {
+    setToastState({ open: true, variant, message })
+  }
 
   function handleChange(e) {
     const { name, value } = e.target
@@ -135,13 +153,13 @@ export default function SingUpPage({ }) {
 
         if (response.ok) {
           console.log('Signup Successful', data)
-          // Store token if needed, e.g., localStorage.setItem('token', data.token)
-          alert("User created successfully!");
-          // Navigate to login or home
+          showToast('success', 'Account created successfully! Welcome aboard.')
+        } else if (response.status === 409) {
+          showAlert('error', 'Email already in use', 'An account with this email already exists. Please log in or use a different email.')
         } else {
           console.log('Signup Failed', data.message)
           setErrors({ ...errors, apiError: data.message })
-          alert(data.message || "Signup failed");
+          showAlert('error', 'Sign up failed', data.message || 'Something went wrong. Please try again.')
         }
       } catch (error) {
         console.error("Error submitting form:", error);
@@ -153,14 +171,33 @@ export default function SingUpPage({ }) {
 
   return (
     <>
+      {/* ── Feedback components ── */}
+      <Alert
+        open={alertState.open}
+        variant={alertState.variant}
+        title={alertState.title}
+        message={alertState.message}
+        backdrop
+        blur
+        onClose={hideAlert}
+        actions={[{ label: 'OK', onClick: hideAlert }]}
+      />
+      <Toast
+        open={toastState.open}
+        variant={toastState.variant}
+        message={toastState.message}
+        position="top-right"
+        duration={4000}
+        onClose={() => setToastState(prev => ({ ...prev, open: false }))}
+      />
       <Grid classes='grid-cols-2 gap-4  overflow-hidden'>
         {/* First column */}
         <Flex className="w-full p-12 flex-col">
           <Flex className="flex items-center justify-between mb-16">
-            <Flex className="flex items-center space-x-2">
+            <a href="./" className="flex items-center space-x-2">
               <Image imgClass="w-40" src="logo.png" />
-            </Flex>
-            <a href="#" class="text-sm text-gray-600 hover:text-gray-900">Already have an account</a>
+            </a>
+            <a href="./login" class="text-sm text-gray-600 hover:text-gray-900">Already have an account</a>
           </Flex>
 
 
@@ -297,8 +334,6 @@ export default function SingUpPage({ }) {
               onChange={handleChange}
             />
             
-            
-
             <FormButton text="Sign Up" className="bg-forest-500 hover:bg-forest-600 transition-colors" />
           </Form>
 
@@ -313,6 +348,7 @@ export default function SingUpPage({ }) {
         </div>
         {/* <Image src="https://images.unsplash.com/photo-1569239591652-6cc3025b07fa?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt='Login background' imgClass='block w-full h-full object-cover' /> */}
       </Grid>
+
     </>
   )
 }
