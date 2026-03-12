@@ -1,6 +1,8 @@
 import React from 'react'
 import { useState } from 'react'
 
+import {useNavigate} from 'react-router-dom'
+
 import Grid from '../components/layout/Grid'
 import Image from '../components/utility/Image'
 import Form from '../components/forms/Form'
@@ -18,6 +20,7 @@ import Toast from '../components/feedback/Toast'
 
 export default function SingUpPage({ }) {
   const apiURL = import.meta.env.VITE_API_URL
+  const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -154,6 +157,7 @@ export default function SingUpPage({ }) {
         if (response.ok) {
           console.log('Signup Successful', data)
           showToast('success', 'Account created successfully! Welcome aboard.')
+          setTimeout(() => navigate(`/new-user-authentication/${data.id}`), 3000)
         } else if (response.status === 409) {
           showAlert('error', 'Email already in use', 'An account with this email already exists. Please log in or use a different email.')
         } else {
