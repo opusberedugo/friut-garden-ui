@@ -18,7 +18,7 @@ import Toast from '../components/feedback/Toast'
 
 
 
-export default function SingUpPage({ }) {
+export default function SingUpPage({ }) { 
   const apiURL = import.meta.env.VITE_API_URL
   const navigate = useNavigate()
 

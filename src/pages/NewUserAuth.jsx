@@ -95,7 +95,7 @@ export default function NewUserAuth(){
             error={otpError}
           />
         </Grid>
-          <Button className="bg-forest-500 w-fit text-center text-white px-8 py-2 rounded-lg">Send OTP</Button>
+          <Button className="bg-forest-500 w-fit text-center text-white px-8 py-2 rounded-lg" onClick={handleSendOtp}>Send OTP</Button>
       </Form>
 
       
