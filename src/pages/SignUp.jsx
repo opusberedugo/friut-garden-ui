@@ -159,7 +159,13 @@ export default function SingUpPage({ }) {
           showToast('success', 'Account created successfully! Welcome aboard.')
           setTimeout(() => navigate(`/new-user-authentication/${data.id}`), 3000)
         } else if (response.status === 409) {
-          showAlert('error', 'Email already in use', 'An account with this email already exists. Please log in or use a different email.')
+          if (data.field === 'phone') {
+            setErrors(prev => ({ ...prev, phone: 'This phone number is already registered.' }))
+            showAlert('error', 'Phone number already in use', 'An account with this phone number already exists. Please use a different number.')
+          } else {
+            setErrors(prev => ({ ...prev, email: 'This email address is already registered.' }))
+            showAlert('error', 'Email already in use', 'An account with this email already exists. Please log in or use a different email.')
+          }
         } else {
           console.log('Signup Failed', data.message)
           setErrors({ ...errors, apiError: data.message })

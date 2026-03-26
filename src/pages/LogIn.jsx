@@ -28,7 +28,7 @@ function LogInPage() {
     if (!formData.email) {
       newErrors.email = 'Email is required';
       isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    } else if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
       isValid = false;
     }
@@ -46,22 +46,20 @@ function LogInPage() {
     return isValid;
   };
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData(prev => ({
-  //     ...prev,
-  //     [name]: value
-  //   }));
-  //   // Clear error when user types
-  //   if (errors[name]) {
-  //     setErrors(prev => ({
-  //       ...prev,
-  //       [name]: ''
-  //     }));
-  //   }
-  // };
-
-  const handleChange = ()=>{}
+  const handleChange = (e)=>{
+    const {name, value} = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    // Clear error when user types
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();

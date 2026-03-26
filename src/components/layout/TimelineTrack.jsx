@@ -8,13 +8,15 @@ import Flex from './Flex'
  * The active dot is labelled with an event name and date above it.
  * Label is always fully visible — clamped away from the edges so it never clips.
  *
- * @param {Array}    steps        - Array of step objects: { label, date, ... }
- * @param {number}   activeIndex  - Index of the currently active step
- * @param {function} onStepClick  - Callback(index) when a dot is clicked
+ * @param {Array}    steps            - Array of step objects: { label, date, ... }
+ * @param {number}   activeIndex      - Index of the currently active step
+ * @param {number}   maxAllowedIndex  - Highest index the user may navigate to
+ * @param {function} onStepClick      - Callback(index) when a dot is clicked
  */
-export default function TimelineTrack({ steps = [], activeIndex = 0, onStepClick }) {
+export default function TimelineTrack({ steps = [], activeIndex = 0, maxAllowedIndex, onStepClick }) {
   const activeStep = steps[activeIndex] || {}
   const hasLabel = activeStep.label || activeStep.date
+  const maxAllowed = maxAllowedIndex !== undefined ? maxAllowedIndex : steps.length - 1
 
   // Calculate label position as a percentage (0–100) then clamp so the
   // label never overflows the left or right edge of the track container.
@@ -31,13 +33,11 @@ export default function TimelineTrack({ steps = [], activeIndex = 0, onStepClick
           className='absolute top-0 text-center transition-all duration-500'
           style={{
             left: `${rawPercent}%`,
-            // translateX shifts between -50% (center) toward 0% (left edge)
-            // or -100% (right edge) to keep the label fully within the container.
             transform: rawPercent <= 10
-              ? 'translateX(0)'           // near left edge — align left
+              ? 'translateX(0)'
               : rawPercent >= 90
-                ? 'translateX(-100%)'    // near right edge — align right
-                : 'translateX(-50%)',    // everywhere else — centre
+                ? 'translateX(-100%)'
+                : 'translateX(-50%)',
           }}
         >
           {activeStep.label && (
@@ -60,13 +60,17 @@ export default function TimelineTrack({ steps = [], activeIndex = 0, onStepClick
 
         {/* Dots row */}
         <Flex className='justify-between items-center relative'>
-          {steps.map((step, index) => (
-            <TimelineDot
-              key={index}
-              active={index === activeIndex}
-              onClick={() => onStepClick?.(index)}
-            />
-          ))}
+          {steps.map((step, index) => {
+            const isDisabled = index > maxAllowed
+            return (
+              <TimelineDot
+                key={index}
+                active={index === activeIndex}
+                disabled={isDisabled}
+                onClick={isDisabled ? undefined : () => onStepClick?.(index)}
+              />
+            )
+          })}
         </Flex>
       </div>
 

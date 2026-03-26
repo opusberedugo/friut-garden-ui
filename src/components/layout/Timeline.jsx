@@ -11,30 +11,41 @@ import Flex from './Flex'
  * a large background period label on the left, slide content on the right,
  * and optional prev/next navigation at the bottom left.
  *
- * @param {Array}   steps        - Array of step objects:
- *                                 {
- *                                   label,       // String: dot label shown above track
- *                                   date,        // String: date shown under dot label
- *                                   roundLabel,  // String: rotated side label on slide
- *                                   number,      // String: step number e.g. "01"
- *                                   title,       // String: slide heading
- *                                   description, // String: slide body text
- *                                   href,        // String: "Continue Reading" link URL
- *                                 }
- * @param {string}  periodLabel  - Large ghost text on the left (e.g. "Registration Period")
- * @param {boolean} showNav         - Whether to show the prev/next navigation (default: true)
- * @param {boolean} showTrackBorder  - Whether to show the bottom border under the track (default: true)
+ * @param {Array}   steps            - Array of step objects
+ * @param {number}  activeIndex      - (controlled) externally managed active index
+ * @param {number}  maxAllowedIndex  - Highest index the user may click to (default: all)
+ * @param {function} onStepClick     - (controlled) callback when a dot is clicked
+ * @param {string}  periodLabel      - Large ghost text on the left
+ * @param {boolean} showNav          - Whether to show prev/next navigation (default: true)
+ * @param {boolean} showTrackBorder  - Whether to show the bottom border (default: true)
  * @param {string}  className        - Additional classes for the outer container
  */
-export default function Timeline({ steps = [], periodLabel = '', showNav = true, showTrackBorder = true, className = '' }) {
-  const [activeIndex, setActiveIndex] = useState(0)
+export default function Timeline({
+  steps = [],
+  activeIndex: controlledIndex,
+  maxAllowedIndex,
+  onStepClick: controlledOnStepClick,
+  periodLabel = '',
+  showNav = true,
+  showTrackBorder = true,
+  className = ''
+}) {
+  const [internalIndex, setInternalIndex] = useState(0)
+
+  // Use controlled values if provided, otherwise use internal state
+  const isControlled = controlledIndex !== undefined
+  const activeIndex = isControlled ? controlledIndex : internalIndex
+  const setActiveIndex = isControlled ? controlledOnStepClick : setInternalIndex
+
+  // The highest step index the user is allowed to click
+  const maxAllowed = maxAllowedIndex !== undefined ? maxAllowedIndex : steps.length - 1
 
   function handlePrev() {
-    setActiveIndex((prev) => Math.max(prev - 1, 0))
+    setActiveIndex(Math.max(activeIndex - 1, 0))
   }
 
   function handleNext() {
-    setActiveIndex((prev) => Math.min(prev + 1, steps.length - 1))
+    setActiveIndex(Math.min(activeIndex + 1, maxAllowed))
   }
 
   const activeStep = steps[activeIndex] || {}
@@ -44,7 +55,7 @@ export default function Timeline({ steps = [], periodLabel = '', showNav = true,
     (s) => s.roundLabel || s.number || s.title || s.description || s.href
   )
 
-  // Determine if the current active step has slide content
+  // Determine if the current active step has content
   const activeStepHasContent =
     activeStep.roundLabel || activeStep.number || activeStep.title ||
     activeStep.description || activeStep.href
@@ -60,6 +71,7 @@ export default function Timeline({ steps = [], periodLabel = '', showNav = true,
         <TimelineTrack
           steps={steps}
           activeIndex={activeIndex}
+          maxAllowedIndex={maxAllowed}
           onStepClick={setActiveIndex}
         />
       </div>
@@ -91,7 +103,7 @@ export default function Timeline({ steps = [], periodLabel = '', showNav = true,
                     current={activeIndex + 1}
                     total={steps.length}
                     disablePrev={activeIndex === 0}
-                    disableNext={activeIndex === steps.length - 1}
+                    disableNext={activeIndex >= maxAllowed}
                   />
                 </div>
               )}
