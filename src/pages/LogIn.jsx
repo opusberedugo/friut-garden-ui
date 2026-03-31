@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 import Grid from '../components/layout/Grid'
 import Image from '../components/utility/Image'
 import Form from '../components/forms/Form'
@@ -8,85 +10,142 @@ import FormButton from '../components/forms/Button'
 import Checkbox from '../components/forms/Checkbox'
 import UIButton from '../components/ui/Button'
 import Flex from '../components/layout/Flex'
+import Alert from '../components/feedback/Alert'
+import Toast from '../components/feedback/Toast'
 
 function LogInPage() {
+  const apiURL = import.meta.env.VITE_API_URL
+  const navigate = useNavigate()
+
   const [formData, setFormData] = useState({
     email: '',
     password: ''
-  });
+  })
 
   const [errors, setErrors] = useState({
     email: '',
     password: ''
-  });
+  })
+
+  const [alertState, setAlertState] = useState({ open: false, variant: 'info', title: '', message: '' })
+  const [toastState, setToastState] = useState({ open: false, variant: 'success', message: '' })
+
+  function showAlert(variant, title, message) {
+    setAlertState({ open: true, variant, title, message })
+  }
+
+  function hideAlert() {
+    setAlertState(prev => ({ ...prev, open: false }))
+  }
+
+  function showToast(variant, message) {
+    setToastState({ open: true, variant, message })
+  }
 
   const validateForm = () => {
-    let isValid = true;
-    const newErrors = { email: '', password: '' };
+    let isValid = true
+    const newErrors = { email: '', password: '' }
 
     // Email validation
     if (!formData.email) {
-      newErrors.email = 'Email is required';
-      isValid = false;
+      newErrors.email = 'Email is required'
+      isValid = false
     } else if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
-      isValid = false;
+      newErrors.email = 'Please enter a valid email address'
+      isValid = false
     }
 
     // Password validation
     if (!formData.password) {
-      newErrors.password = 'Password is required';
-      isValid = false;
+      newErrors.password = 'Password is required'
+      isValid = false
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-      isValid = false;
+      newErrors.password = 'Password must be at least 6 characters'
+      isValid = false
     }
 
-    setErrors(newErrors);
-    return isValid;
-  };
+    setErrors(newErrors)
+    return isValid
+  }
 
-  const handleChange = (e)=>{
-    const {name, value} = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
     // Clear error when user types
     if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
+      setErrors(prev => ({ ...prev, [name]: '' }))
     }
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      console.log('Login Successful:', formData);
-      alert('Login Successful!');
-    } else {
-      console.log('Validation Failed');
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (!validateForm()) {
+      console.log('Validation Failed')
+      return
     }
-  };
+
+    try {
+      const response = await fetch(apiURL + '/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        console.log('Login Successful', data)
+        showToast('success', 'Login successful! Please verify your email to continue.')
+        setTimeout(() => navigate(`/email-authentication/${data.id}`), 1500)
+      } else if (response.status === 404) {
+        showAlert('error', 'Account not found', 'No account exists with that email address. Please check your email or sign up.')
+      } else if (response.status === 401) {
+        showAlert('error', 'Details are incorrect', 'The email or password you entered is incorrect. Please try again.')
+        setErrors(prev => ({ ...prev, password: 'Incorrect password' }))
+      } else {
+        showAlert('error', 'Login failed', data.message || 'Something went wrong. Please try again.')
+      }
+    } catch (error) {
+      console.error('Error during login:', error)
+      showAlert('error', 'Connection error', 'Could not reach the server. Please check your connection and try again.')
+    }
+  }
 
   return (
     <>
-      <Grid classes='grid-cols-2 gap-4  overflow-hidden'>
+      {/* ── Feedback components ── */}
+      <Alert
+        open={alertState.open}
+        variant={alertState.variant}
+        title={alertState.title}
+        message={alertState.message}
+        backdrop
+        blur
+        onClose={hideAlert}
+        actions={[{ label: 'OK', onClick: hideAlert }]}
+      />
+      <Toast
+        open={toastState.open}
+        variant={toastState.variant}
+        message={toastState.message}
+        position="top-right"
+        duration={4000}
+        onClose={() => setToastState(prev => ({ ...prev, open: false }))}
+      />
+
+      <Grid classes='grid-cols-2 gap-4 overflow-hidden'>
         {/* First column */}
         <Flex className="w-full p-12 flex-col">
-          <Flex className=" items-center justify-between mb-16">
+          <Flex className="items-center justify-between mb-16">
             <Flex className="flex items-center space-x-2">
               <Image imgClass="w-40" src="logo.png" />
             </Flex>
-            <a href="/signup  " className="text-sm text-gray-600 hover:text-gray-900">Create an account</a>
+            <a href="/signup" className="text-sm text-gray-600 hover:text-gray-900">Create an account</a>
           </Flex>
-
 
           <div className="mb-8">
             <h1 className="text-3xl font-semibold text-gray-900 mb-2">Welcome back</h1>
-            <p className="text-gray-600">Enter your Untitled account details.</p>
+            <p className="text-gray-600">Enter your account details to sign in.</p>
           </div>
 
           <UIButton text="Log In with Google" onClick={() => { }} className="mb-4 w-full flex items-center justify-center space-x-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
@@ -99,12 +158,10 @@ function LogInPage() {
           </UIButton>
 
           <UIButton text="Log In with Facebook" onClick={() => { }} className="mb-4 w-full flex items-center justify-center space-x-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-            <svg fill="currentColor" className="w-5 h-5 mx-4" viewBox="0 0 24 24">
+            <svg fill="#1877F2" className="w-5 h-5 mx-4" viewBox="0 0 24 24">
               <path d="M22 12.037C22 6.494 17.523 2 12 2S2 6.494 2 12.037c0 4.707 3.229 8.656 7.584 9.741v-6.674H7.522v-3.067h2.062v-1.322c0-3.416 1.54-5 4.882-5 .634 0 1.727.125 2.174.25v2.78a13 13 0 0 0-1.155-.037c-1.64 0-2.273.623-2.273 2.244v1.085h3.266l-.56 3.067h-2.706V22C18.164 21.4 22 17.168 22 12.037" />
             </svg>
           </UIButton>
-
-
 
           <Divider text="OR" />
 
@@ -135,7 +192,7 @@ function LogInPage() {
               <Checkbox text="Remember me" name="remember" checked={false} onChange={() => { }} />
               <a href="#" className="text-gray-600 hover:text-gray-900">Forgot password?</a>
             </div>
-            <FormButton className="bg-forest-500 w-full" text="Log In" onClick={handleSubmit} />
+            <FormButton className="bg-forest-500 hover:bg-forest-600 transition-colors" text="Log In" />
           </Form>
 
           <div className="mt-auto pt-8 text-center">
@@ -143,15 +200,13 @@ function LogInPage() {
           </div>
         </Flex>
 
-        {/* Image Serving as second column */}
+        {/* Image serving as second column */}
         <div className='fixed top-0 right-0 w-1/2 h-screen'>
           <Image src="hasan-almasi-Z4NJcyOAPvc-unsplash.jpg" alt='Login background' imgClass='block w-full h-full object-cover' />
         </div>
-        {/* <Image src="https://images.unsplash.com/photo-1569239591652-6cc3025b07fa?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt='Login background' imgClass='block w-full h-full object-cover' /> */}
       </Grid>
     </>
   )
-
 }
 
 export default LogInPage

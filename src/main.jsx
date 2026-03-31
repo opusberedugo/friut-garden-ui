@@ -7,6 +7,8 @@ import LandingPage from './pages/LandingPage.jsx'
 import NewUserAuth from './pages/NewUserAuth.jsx'
 import SignUpPage from './pages/SignUp.jsx'
 import LogInPage from './pages/LogIn.jsx'
+import EmailAuth from './pages/EmailAuth.jsx'
+import HomePage from './pages/HomePage.jsx'
 
 const router = createBrowserRouter([
   {
@@ -21,13 +23,17 @@ const router = createBrowserRouter([
     path: "/login",
     element: <LogInPage />,
   },
-  // {
-  //   path: "/home/*",
-  //   element: <LandingPage />,
-  // },
+  {
+    path: "/home/*",
+    element: <HomePage />,
+  },
   {
     path: "/new-user-authentication/:id",
     element: <NewUserAuth />
+  },
+  {
+    path: "/email-authentication/:id",
+    element: <EmailAuth />
   },
 ])
 

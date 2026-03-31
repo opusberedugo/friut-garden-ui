@@ -108,7 +108,7 @@ export default function NewUserAuth(){
   }
 
   return (
-    <div className="py-10 px-24">
+    <>
 
       <Flex className="flex items-center justify-between mb-16">
         <a href="#" className="text-sm text-gray-600 hover:text-gray-900">
@@ -223,6 +223,10 @@ export default function NewUserAuth(){
             <div className="mb-8">
               <h1 className="text-2xl font-semibold text-gray-900 mb-2">User Preferences</h1>
               <p className="text-gray-600">Tell us a bit about yourself to personalise your experience.</p>
+
+              <Form>
+                
+              </Form>
             </div>
             {/* Preferences form will go here */}
           </div>
@@ -230,6 +234,6 @@ export default function NewUserAuth(){
         </div>
       </div>
 
-    </div>
+    </>
   )
 }
