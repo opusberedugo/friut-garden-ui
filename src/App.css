@@ -99,3 +99,83 @@
   --shadow-forest: 0 8px 32px -4px rgb(26 77 46 / 0.25);
 
 }
+
+/* ─── Slider input ──────────────────────────────────────────────────────────── */
+
+/* Remove all default UA styles from the track */
+.slider-input {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  width: 100%;
+  height: 20px;                   /* match thumb height so flex centres cleanly */
+  border-radius: 9999px;
+  cursor: pointer;
+}
+
+/* Keep the browser's own track strip invisible — our div handles visuals */
+.slider-input::-webkit-slider-runnable-track {
+  background: transparent;
+  height: 6px;
+  border-radius: 9999px;
+}
+
+/* ── Webkit (Chrome, Safari, Edge) thumb ── */
+.slider-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: #1a4d2e;            /* forest-500 */
+  border: 3px solid #ffffff;
+  box-shadow: 0 1px 6px rgb(26 77 46 / 0.35);
+  cursor: grab;
+  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+  margin-top: -7px;               /* vertically centre on the 6 px track */
+}
+
+.slider-input::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 2px 12px rgb(26 77 46 / 0.45);
+  background: #143d24;            /* forest-600 */
+}
+
+.slider-input:active::-webkit-slider-thumb,
+.slider-input::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.2);
+  box-shadow: 0 0 0 4px rgb(120 194 48 / 0.25); /* lime-500 focus ring */
+}
+
+/* ── Firefox thumb ── */
+.slider-input::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: #1a4d2e;
+  border: 3px solid #ffffff;
+  box-shadow: 0 1px 6px rgb(26 77 46 / 0.35);
+  cursor: grab;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.slider-input::-moz-range-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 2px 12px rgb(26 77 46 / 0.45);
+}
+
+/* Firefox track needs explicit height too */
+.slider-input::-moz-range-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: #e5e7eb;            /* gray-200 */
+}
+
+/* ── Disabled state ── */
+.slider-input:disabled::-webkit-slider-thumb,
+.slider-input:disabled::-moz-range-thumb {
+  background: #9ca3af;            /* gray-400 */
+  box-shadow: none;
+  cursor: not-allowed;
+}

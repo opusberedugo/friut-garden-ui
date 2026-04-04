@@ -7,6 +7,12 @@ import Form from '../components/forms/Form'
 import Button from "../components/ui/Button";
 import Grid from "../components/layout/Grid";
 import OTPInput from "../components/forms/OTPInput";
+import MultiSelect from "../components/forms/MultiSelect";
+import CategoryPicker from "../components/forms/CategoryPicker";
+import Toggle from "../components/forms/Toggle";
+import FormLabel from "../components/forms/FormLabel";
+import Slider from "../components/forms/Slider";
+import FormButton from "../components/forms/Button";
 
 export default function NewUserAuth(){
   const { id } = useParams()
@@ -22,6 +28,28 @@ export default function NewUserAuth(){
   const [emailOtpError, setEmailOtpError] = useState('')
   const [emailVerified, setEmailVerified] = useState(false)
   const [emailVerifyError, setEmailVerifyError] = useState('')
+
+  // ── Phone verification ──────────────────────────────────────
+  const [phoneOtp, setPhoneOtp] = useState('')
+  const [phoneOtpError, setPhoneOtpError] = useState('')
+  const [phoneVerified, setPhoneVerified] = useState(false)
+  const [phoneVerifyError, setPhoneVerifyError] = useState('')
+  const [phoneSendError, setPhoneSendError] = useState('')
+
+  // ── Preferences ──────────────────────────────────────
+  const [selectedOptions, setSelectedOptions] = useState([])
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false)
+  const [budget, setBudget] = useState(0)
+  const [minBudget, setMinBudget] = useState(0)
+  const [maxBudget, setMaxBudget] = useState(0)
+  const [seasons, setSeasons] = useState([])
+  const [seasonsError, setSeasonsError] = useState('')
+  const [categories, setCategories] = useState([])
+  const [categoriesError, setCategoriesError] = useState('')
+  const [favoriteCategories, setFavoriteCategories] = useState([])
+  const [excludedCategories, setExcludedCategories] = useState([])
+
+  console.log("Categories Length", categories.length)
 
   const emailSentRef = useRef(false)
 
@@ -44,6 +72,57 @@ export default function NewUserAuth(){
       emailSentRef.current = true
       sendVerificationEmail()
     }
+
+    async function fetchMinMax(){
+      try {
+        const response = await fetch(`${apiURL}/get-min-max-cost`)
+        if (response.ok) {
+          const data = await response.json()
+          setMinBudget(data.min)
+          setMaxBudget(data.max)
+        } else {
+          setBudgetError('Failed to fetch min-max budget. Please try again.')
+        }
+      } catch (err) {
+        console.error('Error fetching min-max budget:', err)
+        setBudgetError('Could not reach the server. Please check your connection.')
+      }
+    }
+
+    async function fetchSeasons(){
+      try {
+        const response = await fetch(`${apiURL}/get-seasons`)
+        if (response.ok) {
+          const data = await response.json()
+          setSeasons(data)
+        } else {
+          setSeasonsError('Failed to fetch seasons. Please try again.')
+        }
+      } catch (err) {
+        console.error('Error fetching seasons:', err)
+        setSeasonsError('Could not reach the server. Please check your connection.')
+      }
+    }
+
+    async function fetchCategories(){
+      try {
+        const response = await fetch(`${apiURL}/get-categories`)
+        if (response.ok) {
+          const data = await response.json()
+          setCategories(data)
+        } else {
+          setCategoriesError('Failed to fetch categories. Please try again.')
+        }
+      } catch (err) {
+        console.error('Error fetching categories:', err)
+        setCategoriesError('Could not reach the server. Please check your connection.')
+      }
+    }
+
+
+    fetchMinMax()
+    fetchSeasons()
+    fetchCategories()
   }, [id])
 
   async function sendVerificationPhone() {
@@ -87,12 +166,6 @@ export default function NewUserAuth(){
     }
   }
 
-  // ── Phone verification ──────────────────────────────────────
-  const [phoneOtp, setPhoneOtp] = useState('')
-  const [phoneOtpError, setPhoneOtpError] = useState('')
-  const [phoneVerified, setPhoneVerified] = useState(false)
-  const [phoneVerifyError, setPhoneVerifyError] = useState('')
-  const [phoneSendError, setPhoneSendError] = useState('')
 
 
 
@@ -108,7 +181,7 @@ export default function NewUserAuth(){
   }
 
   return (
-    <>
+    <div className="p-20">
 
       <Flex className="flex items-center justify-between mb-16">
         <a href="#" className="text-sm text-gray-600 hover:text-gray-900">
@@ -145,6 +218,61 @@ export default function NewUserAuth(){
           className="flex transition-transform duration-500 ease-in-out"
           style={{ transform: `translateX(-${currentStep * 100}%)` }}
         >
+
+          {/* ── Step 2: User Preferences ── */}
+          <div className="w-full flex-shrink-0 px-20">
+            <div className="mb-8">
+              <h1 className="text-2xl font-semibold text-gray-900 mb-2">User Preferences</h1>
+              <p className="text-gray-600">Tell us a bit about yourself to personalise your experience.</p>
+
+              <Form className="mt-4">
+                
+                <CategoryPicker
+                  label="Your Category Preferences"
+                  categories={categories}
+                  favorites={favoriteCategories}
+                  exclusions={excludedCategories}
+                  onFavoritesChange={setFavoriteCategories}
+                  onExclusionsChange={setExcludedCategories}
+                />
+
+                <Flex className={"w-full flex items-center justify-between"}>
+                  <FormLabel name="notificationsEnabled" label="I want to see organic products" />
+                  <Toggle
+                    name="notificationsEnabled"
+                    checked={notificationsEnabled}
+                    onChange={setNotificationsEnabled}
+                  />
+                </Flex>
+
+                <Slider
+                  name="budget"
+                  label="Max Budget"
+                  value={budget}
+                  onChange={(e) => setBudget(Number(e.target.value))}
+                  min={minBudget}
+                  max={maxBudget}
+                  shadow={false}
+                  step={0.01}
+                  unit=" MUR"
+                  leftText={minBudget}
+                  rightText={`MUR ${maxBudget}`}
+                />
+
+                <MultiSelect
+                  label="Select your prefered Seasonal Items"
+                  options={seasons.map((season) => ({ value: season, label: season }))}
+                  value={selectedOptions}
+                  onChange={setSelectedOptions}
+                  placeholder="Select options"
+                />
+
+                <FormButton className="bg-forest-500 hover:bg-forest-600 transition-colors" text="Log In" />
+
+              </Form>
+            </div>
+            {/* Preferences form will go here */}
+          </div>
 
           {/* ── Step 0: Email OTP ── */}
           <div className="w-full flex-shrink-0 px-20">
@@ -218,22 +346,10 @@ export default function NewUserAuth(){
             </Form>
           </div>
 
-          {/* ── Step 2: User Preferences ── */}
-          <div className="w-full flex-shrink-0 px-20">
-            <div className="mb-8">
-              <h1 className="text-2xl font-semibold text-gray-900 mb-2">User Preferences</h1>
-              <p className="text-gray-600">Tell us a bit about yourself to personalise your experience.</p>
-
-              <Form>
-                
-              </Form>
-            </div>
-            {/* Preferences form will go here */}
-          </div>
-
+          
         </div>
       </div>
 
-    </>
+    </div>
   )
 }
