@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Timeline from "../components/layout/Timeline";
 import Flex from "../components/layout/Flex";
 import Image from "../components/utility/Image";
@@ -13,9 +13,11 @@ import Toggle from "../components/forms/Toggle";
 import FormLabel from "../components/forms/FormLabel";
 import Slider from "../components/forms/Slider";
 import FormButton from "../components/forms/Button";
+import Alert from "../components/feedback/Alert";
 
 export default function NewUserAuth(){
   const { id } = useParams()
+  const navigate = useNavigate()
   const apiURL = import.meta.env.VITE_API_URL
 
   // Which step is active on the timeline (0 = email, 1 = phone, 2 = preferences)
@@ -37,8 +39,8 @@ export default function NewUserAuth(){
   const [phoneSendError, setPhoneSendError] = useState('')
 
   // ── Preferences ──────────────────────────────────────
-  const [selectedOptions, setSelectedOptions] = useState([])
-  const [notificationsEnabled, setNotificationsEnabled] = useState(false)
+  const [selectedSeasons, setSelectedSeasons] = useState([])
+  const [organicOnly, setOrganicOnly] = useState(false)
   const [budget, setBudget] = useState(0)
   const [minBudget, setMinBudget] = useState(0)
   const [maxBudget, setMaxBudget] = useState(0)
@@ -48,6 +50,16 @@ export default function NewUserAuth(){
   const [categoriesError, setCategoriesError] = useState('')
   const [favoriteCategories, setFavoriteCategories] = useState([])
   const [excludedCategories, setExcludedCategories] = useState([])
+
+  const [alertState, setAlertState] = useState({ open: false, variant: 'info', title: '', message: '' })
+
+  function showAlert(variant, title, message) {
+    setAlertState({ open: true, variant, title, message })
+  }
+
+  function hideAlert() {
+    setAlertState(prev => ({ ...prev, open: false }))
+  }
 
   console.log("Categories Length", categories.length)
 
@@ -130,7 +142,11 @@ export default function NewUserAuth(){
       const response = await fetch(`${apiURL}/send-verification-phone/${id}`)
       if (!response.ok) {
         setPhoneSendError('Failed to send SMS verification code. Please try again.')
+      }else{
+        // setPhoneSendError('')
+        
       }
+
     } catch (err) {
       console.error('Error sending phone verification:', err)
       setPhoneSendError('Could not reach the server. Please check your connection.')
@@ -180,15 +196,79 @@ export default function NewUserAuth(){
     setTimeout(() => setCurrentStep(2), 800)
   }
 
+  async function handleSavePreferences(e) {
+    e.preventDefault()
+
+    if (favoriteCategories.length < 5) {
+      showAlert('error', 'Incomplete Preferences', 'Please select at least 5 favorite categories.')
+      return
+    }
+
+    if (selectedSeasons.length < 3) {
+      showAlert('error', 'Incomplete Preferences', 'Please select at least 3 seasonal item preferences.')
+      return
+    }
+
+    let finalBudget = budget;
+    if (finalBudget === 0 || finalBudget < minBudget) {
+      finalBudget = minBudget;
+      setBudget(minBudget); // autofix in UI
+    }
+
+    try {
+      const payload = {
+        userId: id, // encrypted ID from URL
+        favoriteCategories: favoriteCategories,
+        excludedCategories: excludedCategories,
+        organicOnly: organicOnly,
+        budget: finalBudget,
+        selectedSeasons: selectedSeasons
+      }
+
+      console.log("Submitting preferences...", payload)
+
+      const response = await fetch(`${apiURL}/save-preferences`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Preferences saved successfully!", data)
+        // Authentication JWT logic
+        if (data.token) {
+          localStorage.setItem('fm_token', data.token);
+        }
+        navigate(`/home/${id}`)
+      } else {
+        console.error("Failed to save preferences.")
+      }
+    } catch (err) {
+      console.error('Error saving preferences:', err)
+    }
+  }
+
   return (
-    <div className="p-20">
+    <>
+      <Alert
+        open={alertState.open}
+        variant={alertState.variant}
+        title={alertState.title}
+        message={alertState.message}
+        backdrop
+        blur
+        onClose={hideAlert}
+        actions={[{ label: 'OK', onClick: hideAlert }]}
+      />
+      <div className="p-20">
 
       <Flex className="flex items-center justify-between mb-16">
-        <a href="#" className="text-sm text-gray-600 hover:text-gray-900">
+        <button type="button" onClick={() => navigate(-1)} className="text-sm text-gray-600 hover:text-gray-900 focus:outline-none" aria-label="Go Back">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M3.57813 12.4981C3.5777 12.6905 3.65086 12.8831 3.79761 13.0299L9.7936 19.0301C10.0864 19.3231 10.5613 19.3233 10.8543 19.0305C11.1473 18.7377 11.1474 18.2629 10.8546 17.9699L6.13418 13.2461L20.3295 13.2461C20.7437 13.2461 21.0795 12.9103 21.0795 12.4961C21.0795 12.0819 20.7437 11.7461 20.3295 11.7461L6.14168 11.7461L10.8546 7.03016C11.1474 6.73718 11.1473 6.2623 10.8543 5.9695C10.5613 5.6767 10.0864 5.67685 9.79362 5.96984L3.84392 11.9233C3.68134 12.0609 3.57812 12.2664 3.57812 12.4961L3.57813 12.4981Z" fill="#323544"/>
           </svg>
-        </a>
+        </button>
         <Flex className="flex items-center space-x-2">
           <Image imgClass="w-40" src="logo.png" />
         </Flex>
@@ -218,61 +298,6 @@ export default function NewUserAuth(){
           className="flex transition-transform duration-500 ease-in-out"
           style={{ transform: `translateX(-${currentStep * 100}%)` }}
         >
-
-          {/* ── Step 2: User Preferences ── */}
-          <div className="w-full flex-shrink-0 px-20">
-            <div className="mb-8">
-              <h1 className="text-2xl font-semibold text-gray-900 mb-2">User Preferences</h1>
-              <p className="text-gray-600">Tell us a bit about yourself to personalise your experience.</p>
-
-              <Form className="mt-4">
-                
-                <CategoryPicker
-                  label="Your Category Preferences"
-                  categories={categories}
-                  favorites={favoriteCategories}
-                  exclusions={excludedCategories}
-                  onFavoritesChange={setFavoriteCategories}
-                  onExclusionsChange={setExcludedCategories}
-                />
-
-                <Flex className={"w-full flex items-center justify-between"}>
-                  <FormLabel name="notificationsEnabled" label="I want to see organic products" />
-                  <Toggle
-                    name="notificationsEnabled"
-                    checked={notificationsEnabled}
-                    onChange={setNotificationsEnabled}
-                  />
-                </Flex>
-
-                <Slider
-                  name="budget"
-                  label="Max Budget"
-                  value={budget}
-                  onChange={(e) => setBudget(Number(e.target.value))}
-                  min={minBudget}
-                  max={maxBudget}
-                  shadow={false}
-                  step={0.01}
-                  unit=" MUR"
-                  leftText={minBudget}
-                  rightText={`MUR ${maxBudget}`}
-                />
-
-                <MultiSelect
-                  label="Select your prefered Seasonal Items"
-                  options={seasons.map((season) => ({ value: season, label: season }))}
-                  value={selectedOptions}
-                  onChange={setSelectedOptions}
-                  placeholder="Select options"
-                />
-
-                <FormButton className="bg-forest-500 hover:bg-forest-600 transition-colors" text="Log In" />
-
-              </Form>
-            </div>
-            {/* Preferences form will go here */}
-          </div>
 
           {/* ── Step 0: Email OTP ── */}
           <div className="w-full flex-shrink-0 px-20">
@@ -346,10 +371,66 @@ export default function NewUserAuth(){
             </Form>
           </div>
 
+          {/* ── Step 2: User Preferences ── */}
+          <div className="w-full flex-shrink-0 px-20">
+            <div className="mb-8">
+              <h1 className="text-2xl font-semibold text-gray-900 mb-2">User Preferences</h1>
+              <p className="text-gray-600">Tell us a bit about yourself to personalise your experience.</p>
+
+              <Form className="mt-4" onSubmit={handleSavePreferences}>
+                
+                <CategoryPicker
+                  label="Your Category Preferences"
+                  categories={categories}
+                  favorites={favoriteCategories}
+                  exclusions={excludedCategories}
+                  onFavoritesChange={setFavoriteCategories}
+                  onExclusionsChange={setExcludedCategories}
+                />
+
+                <Flex className={"w-full flex items-center justify-between"}>
+                  <FormLabel name="organicOnly" label="I want to see organic products only" />
+                  <Toggle
+                    name="organicOnly"
+                    checked={organicOnly}
+                    onChange={(e) => setOrganicOnly(e.target.checked)}
+                  />
+                </Flex>
+
+                <Slider
+                  name="budget"
+                  label="Max Budget"
+                  value={budget}
+                  onChange={(e) => setBudget(Number(e.target.value))}
+                  min={minBudget}
+                  max={maxBudget}
+                  shadow={false}
+                  step={0.01}
+                  unit=" MUR"
+                  leftText={minBudget}
+                  rightText={`MUR ${maxBudget}`}
+                />
+
+                <MultiSelect
+                  label="Select your prefered Seasonal Items"
+                  options={seasons.map((season) => ({ value: season, label: season }))}
+                  value={selectedSeasons}
+                  onChange={setSelectedSeasons}
+                  placeholder="Select options"
+                />
+
+                <FormButton className="bg-forest-500 hover:bg-forest-600 transition-colors" text="Log In" />
+
+              </Form>
+            </div>
+            {/* Preferences form will go here */}
+          </div>
+
           
         </div>
       </div>
 
     </div>
+    </>
   )
 }

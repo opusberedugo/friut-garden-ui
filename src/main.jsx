@@ -9,6 +9,8 @@ import SignUpPage from './pages/SignUp.jsx'
 import LogInPage from './pages/LogIn.jsx'
 import EmailAuth from './pages/EmailAuth.jsx'
 import HomePage from './pages/HomePage.jsx'
+import ProductPage from './pages/ProductPage.jsx'
+import SearchPage from './pages/SearchPage.jsx'
 
 const router = createBrowserRouter([
   {
@@ -24,7 +26,7 @@ const router = createBrowserRouter([
     element: <LogInPage />,
   },
   {
-    path: "/home/*",
+    path: "/home/:id",
     element: <HomePage />,
   },
   {
@@ -34,6 +36,14 @@ const router = createBrowserRouter([
   {
     path: "/email-authentication/:id",
     element: <EmailAuth />
+  },
+  {
+    path: "/product/:productId",
+    element: <ProductPage />
+  },
+  {
+    path: "/search",
+    element: <SearchPage />
   },
 ])
 

@@ -2,17 +2,52 @@ import React, { Children } from 'react'
 import Image from '../utility/Image'
 import UIButton from '../ui/Button'
 import Flex from '../layout/Flex'
+import { useNavigate } from 'react-router-dom'
 
-export default function ProductTile({productName, productImage, productPrice, productDescription, productLink, children}){
+export default function ProductTile({productId, productName, productImage, productPrice, productDescription, productLink, children}){
+    const navigate = useNavigate();
+
+    const handleTileClick = async (e) => {
+        e.preventDefault(); // Prevent default navigation to allow POST request first
+
+        try {
+            const token = localStorage.getItem('fm_token');
+            const apiURL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            
+            // BOILERPLATE: Send POST request (e.g., telemetry, interaction tracking)
+            await fetch(`${apiURL}/interactions`, {
+                method: 'POST',
+                headers: { 
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}` 
+                },
+                body: JSON.stringify({
+                    action: 'click',
+                    productId: productId, 
+                }),
+            });
+        } catch (error) {
+            console.error('Error sending interaction request:', error);
+        } finally {
+            // BOILERPLATE: Redirect to product page after POST request finishes or fails
+            // Check if it is an external or internal link
+            if (productLink && productLink.startsWith('http')) {
+                window.location.href = productLink;
+            } else {
+                navigate(productLink || '#');
+            }
+        }
+    };
+
     return(
-      <a href={productLink}>
+      <a href={productLink} onClick={handleTileClick}>
         <Image src={productImage} alt={productName} imgClass="w-full block" />
         <Flex className={"gap-2 mt-2"}>
           {children}
         </Flex>
         <p>{productName}</p>
         <p>{productPrice} MUR</p>
-        <p>{productDescription}</p>
+        {/* <p>{productDescription}</p> */}
         <Flex className={"gap-2 my-2"}>
           <UIButton text="Add to Cart" onClick={() => {}} className={"bg-lime-500 px-4 py-2 rounded-full "} />
           <UIButton text="" onClick={() => {}} className={"bg-lime-500 p-2 px-2.5 rounded-full "}>

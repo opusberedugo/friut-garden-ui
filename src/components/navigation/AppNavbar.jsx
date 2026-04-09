@@ -1,11 +1,23 @@
 import React from "react";
 
 import Flex from "../layout/Flex";
-
+import Image from "../utility/Image";
 import NavBar from "./NavigationBar";
 
 export default function AppNavBar(){
-  <NavBar>
+  const [searchTerm, setSearchTerm] = React.useState("");
+
+  const handleSearch = () => {
+    if (searchTerm.trim()) {
+      window.location.href = `/search?query=${encodeURIComponent(searchTerm.trim())}`;
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") handleSearch();
+  };
+  return(
+    <NavBar>
         <div className='mx-auto px-6 lg:px-10 py-5'>
           <Flex className='justify-between items-center'>
             <a href="" className='block w-24 hover:scale-110 transition-transform duration-300'>
@@ -19,9 +31,12 @@ export default function AppNavBar(){
                         <input 
                             type="text" 
                             placeholder="Product Search" 
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onKeyDown={handleKeyDown}
                             class="w-full min-w-[400px] px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-isagenix-teal transition text-sm"/>
                             
-                        <button class="absolute right-3 top-1/2 -translate-y-1/2 hover:opacity-70 transition">
+                        <button onClick={handleSearch} class="absolute right-3 top-1/2 -translate-y-1/2 hover:opacity-70 transition">
                             <svg class="w-5 h-5 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="11" cy="11" r="8"/>
                                 <path d="m21 21-4.35-4.35"/>
@@ -56,8 +71,9 @@ export default function AppNavBar(){
             <a href="" className="block px-4 text-sm transition whitespace-nowrap">About</a>
             <a href="" className="block px-4 text-sm transition whitespace-nowrap">About</a>
             <a href="" className="block px-4 text-sm transition whitespace-nowrap">Contact</a>
-            <a href="" className="ml-auto px-6 py-2.5 border-2 border-forest-500 text-forest-500 font-semibold text-sm rounded hover:bg-forest-500 hover:text-white transition whitespace-nowrap">Get S</a>
+            {/* <a href="" className="ml-auto px-6 py-2.5 border-2 border-forest-500 text-forest-500 font-semibold text-sm rounded hover:bg-forest-500 hover:text-white transition whitespace-nowrap">Get S</a> */}
           </Flex>
         </div>
-      </NavBar>
+    </NavBar>
+  )
 }
