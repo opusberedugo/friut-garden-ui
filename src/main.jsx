@@ -11,6 +11,8 @@ import EmailAuth from './pages/EmailAuth.jsx'
 import HomePage from './pages/HomePage.jsx'
 import ProductPage from './pages/ProductPage.jsx'
 import SearchPage from './pages/SearchPage.jsx'
+import CartPage from './pages/CartPage.jsx'
+// import ProfilePage from './pages/ProfilePage.jsx'
 
 const router = createBrowserRouter([
   {
@@ -44,6 +46,10 @@ const router = createBrowserRouter([
   {
     path: "/search",
     element: <SearchPage />
+  },
+    {
+    path: "/profile",
+    element: <CartPage />
   },
 ])
 

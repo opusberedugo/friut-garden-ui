@@ -87,7 +87,7 @@ export default function EmailAuth() {
         setEmailVerified(true)
         setEmailVerifyError('')
         showToast('success', 'Email verified successfully! Redirecting…')
-        setTimeout(() => navigate(`/home/${id}`), 2000)
+        setTimeout(() => navigate(`/home`), 2000)
       } else if (response.status === 401) {
         setEmailOtpError('Invalid code. Please check your email and try again.')
       } else {
