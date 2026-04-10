@@ -30,6 +30,11 @@ export default function HomePage(){
         // 1. Fetch user categories (no longer needs ID in URL thanks to JWT)
         const catRes = await fetch(`${apiURL}/get-user-categories`, fetchOptions)
         if (!catRes.ok) {
+          if (catRes.status === 401 || catRes.status === 403) {
+            localStorage.removeItem('fm_token');
+            navigate('/login');
+            return;
+          }
           setCategoriesError('Failed to fetch categories. Please try again.')
           return;
         }

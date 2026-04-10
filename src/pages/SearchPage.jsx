@@ -21,6 +21,11 @@ export default function SearchPage(){
           };
           const res = await fetch(`${apiURL}/search?query=${decodeURIComponent(query)}`, fetchOptions);
           if (!res.ok) {
+            if (res.status === 401 || res.status === 403) {
+              localStorage.removeItem("fm_token");
+              navigate("/login");
+              return;
+            }
             setError("Failed to fetch products. Please try again.");
             return;
           }

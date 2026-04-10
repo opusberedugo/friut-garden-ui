@@ -240,7 +240,7 @@ export default function NewUserAuth(){
         if (data.token) {
           localStorage.setItem('fm_token', data.token);
         }
-        navigate(`/home/${id}`)
+        navigate(`/home`)
       } else {
         console.error("Failed to save preferences.")
       }
