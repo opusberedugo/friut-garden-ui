@@ -112,7 +112,7 @@ export default function Wishlist() {
         onClose={() => setToast({ ...toast, open: false })}
       />
       <AppNavBar />
-      <Grid className="grid-cols-5 ">
+      <Grid className="grid-cols-1 md:grid-cols-5 ">
         <SideBar className="col-span-1">
           <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Cart" href="/profile" >Cart</SideBarLink>
           <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Wishlist" href="/profile/wishlist" >Wishlist</SideBarLink>
@@ -133,7 +133,7 @@ export default function Wishlist() {
         </SideBar>
 
         {/* Wishlist Page Content */}
-        <div className="col-span-4 w-full px-8 mt-12 min-h-screen pt-8 pb-32 px-12">
+        <div className="col-span-1 md:col-span-4 w-full px-4 md:px-12 mt-12 min-h-screen pt-8 pb-32">
           <div className="max-w-7xl mx-auto">
             <h2 className="text-[28px] font-bold text-gray-900 mb-8">My Wishlist</h2>
 

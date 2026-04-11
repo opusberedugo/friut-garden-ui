@@ -222,7 +222,7 @@ export default function OrdersPage() {
         onClose={() => setToast({ ...toast, open: false })}
       />
       <AppNavBar />
-      <Grid className="grid-cols-5">
+      <Grid className="grid-cols-1 md:grid-cols-5">
 
         {/* ── Sidebar (identical to Cart/Wishlist) ── */}
         <SideBar className="col-span-1">
@@ -245,7 +245,7 @@ export default function OrdersPage() {
         </SideBar>
 
         {/* ── Main Content ── */}
-        <div className="col-span-4 w-full px-12 mt-12 min-h-screen pt-8 pb-32">
+        <div className="col-span-1 md:col-span-4 w-full px-4 md:px-12 mt-12 min-h-screen pt-8 pb-32">
           <div className="max-w-4xl">
 
             <h2 className="text-[28px] font-bold text-gray-900 mb-8">My Orders</h2>

@@ -28,7 +28,7 @@ export default function SalesOrders() {
 
   return (
     <SellerLayout>
-      <div className="max-w-5xl px-12 pt-8 w-full">
+      <div className="max-w-5xl px-4 md:px-12 pt-8 w-full">
         <h2 className="text-[28px] font-bold text-gray-900 mb-1">My Orders</h2>
         <p className="text-gray-500 mb-8">Customer orders that contain your listed products.</p>
 

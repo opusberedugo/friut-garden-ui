@@ -93,7 +93,7 @@ export default function SalesProducts() {
     <SellerLayout>
       <Toast open={toastState.open} variant={toastState.variant} message={toastState.message} position="top-right" duration={4000} onClose={() => setToastState(p => ({ ...p, open: false }))} />
 
-      <div className="max-w-5xl px-12 pt-8 w-full">
+      <div className="max-w-5xl px-4 md:px-12 pt-8 w-full">
         <div className="flex justify-between items-center mb-8">
           <div>
             <h2 className="text-[28px] font-bold text-gray-900 mb-1">My Products</h2>
@@ -183,7 +183,7 @@ export default function SalesProducts() {
               {errors.categoryId && <p className="text-red-500 text-sm mt-1">{errors.categoryId}</p>}
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <FormField name="price" label="Price (MUR)" type="number" placeholder="0.00" value={form.price} onChange={handleChange} required error={errors.price} />
               <div className="form-field">
                 <label className="block text-gray-700 font-medium mb-2">Unit</label>
@@ -193,7 +193,7 @@ export default function SalesProducts() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <FormField name="stock" label="Stock Available" type="number" placeholder="0" value={form.stock} onChange={handleChange} required error={errors.stock} />
               <div className="form-field">
                 <label className="block text-gray-700 font-medium mb-2">Season</label>

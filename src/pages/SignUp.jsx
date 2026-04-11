@@ -200,9 +200,9 @@ export default function SingUpPage({ }) {
         duration={4000}
         onClose={() => setToastState(prev => ({ ...prev, open: false }))}
       />
-      <Grid classes='grid-cols-2 gap-4  overflow-hidden'>
+      <Grid classes='grid-cols-1 md:grid-cols-2 gap-4  overflow-hidden'>
         {/* First column */}
-        <Flex className="w-full p-12 flex-col">
+        <Flex className="w-full p-6 md:p-12 flex-col">
           <Flex className="flex items-center justify-between mb-16">
             <a href="./" className="flex items-center space-x-2">
               <Image imgClass="w-40" src="logo.png" />
@@ -237,7 +237,7 @@ export default function SingUpPage({ }) {
 
           <Form onSubmit={handleSubmit}>
 
-            <FormGroup className="grid-cols-2 gap-4">
+            <FormGroup className="grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 className="mb-4"
                 name="firstName"
@@ -263,7 +263,7 @@ export default function SingUpPage({ }) {
             </FormGroup>
 
             <label className='block text-gray-700 font-medium mb-2'>Date of birth <span className='text-red-500'>*</span></label>
-            <FormGroup className="grid-cols-3 gap-4" error={""} >
+            <FormGroup className="grid-cols-1 sm:grid-cols-3 gap-4" error={""} >
               <FormField
                 className="mb-4"
                 name="birthDay"
@@ -353,7 +353,7 @@ export default function SingUpPage({ }) {
         </Flex>
 
         {/* Image Serving as second column */}
-        <div className='fixed top-0 right-0 w-1/2 h-screen'>
+        <div className='hidden md:block fixed top-0 right-0 w-1/2 h-screen'>
           <Image src="hasan-almasi-Z4NJcyOAPvc-unsplash.jpg" alt='Login background' imgClass='block w-full h-full object-cover' />
         </div>
         {/* <Image src="https://images.unsplash.com/photo-1569239591652-6cc3025b07fa?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt='Login background' imgClass='block w-full h-full object-cover' /> */}

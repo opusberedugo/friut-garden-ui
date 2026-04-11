@@ -106,7 +106,7 @@ export default function SellerLayout({ children }) {
 
     if (status === "pending") {
       return (
-        <div className="max-w-2xl px-12 pt-8">
+        <div className="max-w-2xl px-4 md:px-12 pt-8">
           <div className="bg-orange-50 border border-orange-200 rounded-[2rem] p-10 flex flex-col items-center text-center">
             <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-6">
               <svg className="w-8 h-8 text-orange-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -126,7 +126,7 @@ export default function SellerLayout({ children }) {
 
     if (status === "none") {
       return (
-        <div className="max-w-2xl px-12 pt-8">
+        <div className="max-w-2xl px-4 md:px-12 pt-8">
           <h2 className="text-[28px] font-bold text-gray-900 mb-2">Become a Seller</h2>
           <p className="text-gray-600 mb-8">Offer your best farm products directly to the community. Please provide your business identity to unlock the sales suite.</p>
           
@@ -188,7 +188,7 @@ export default function SellerLayout({ children }) {
   return (
     <>
       <AppNavBar />
-      <Grid className="grid-cols-5 min-h-screen">
+      <Grid className="grid-cols-1 md:grid-cols-5 min-h-screen">
         <SideBar className="col-span-1 border-r border-gray-100">
           <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Cart" href="/profile" >Cart</SideBarLink>
           <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Wishlist" href="/profile/wishlist" >Wishlist</SideBarLink>
@@ -209,7 +209,7 @@ export default function SellerLayout({ children }) {
           <SideBarLink className="text-red-500 bg-transparent hover:bg-transparent hover:text-red-600" text="Log Out" onClick={handleLogout} >Log Out</SideBarLink>
         </SideBar>
 
-        <Grid className="col-span-4 w-full mt-8 pb-32">
+        <Grid className="col-span-1 md:col-span-4 w-full mt-8 pb-32">
           {renderContent()}
         </Grid>
       </Grid>

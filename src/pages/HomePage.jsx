@@ -111,7 +111,7 @@ export default function HomePage(){
       {/* ── Recommended For You (AI-powered) ── */}
       {recommendedProducts.length > 0 && (
         <div className="mb-8">
-          <div className="mt-12 px-12 flex items-center gap-3">
+          <div className="mt-12 px-4 sm:px-6 lg:px-12 flex items-center gap-3">
             <h2 className="text-lg font-medium text-pretty text-forest-900 sm:text-xl">
               {recsSource}
             </h2>
@@ -120,7 +120,7 @@ export default function HomePage(){
               {recsSource === 'Recommended For You' ? '✦ AI Powered' : '✦ Based on Preferences'}
             </span>
           </div>
-          <Grid classes='grid-cols-4 gap-4 px-12 mt-6'>
+          <Grid classes='grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-4 sm:px-6 lg:px-12 mt-6'>
             {recommendedProducts.map((product) => (
               <ProductTile 
                 key={product._id || product.id}
@@ -145,10 +145,10 @@ export default function HomePage(){
         
         return (
         <div key={index} className="mb-8">
-          <h2 className="mt-12 px-12 text-lg font-medium text-pretty text-forest-900 sm:text-xl">
+          <h2 className="mt-12 px-4 sm:px-6 lg:px-12 text-lg font-medium text-pretty text-forest-900 sm:text-xl">
             {catGroup.categoryName}
           </h2>
-          <Grid classes='grid-cols-4 gap-4 px-12 mt-6'>
+          <Grid classes='grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-4 sm:px-6 lg:px-12 mt-6'>
             {catGroup.products.map((product) => (
               <ProductTile 
                 key={product._id || product.id || Math.random()}

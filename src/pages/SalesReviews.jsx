@@ -37,7 +37,7 @@ export default function SalesReviews() {
 
   return (
     <SellerLayout>
-      <div className="max-w-5xl px-12 pt-8 w-full">
+      <div className="max-w-5xl px-4 md:px-12 pt-8 w-full">
         <div className="flex items-start justify-between mb-8">
           <div>
             <h2 className="text-[28px] font-bold text-gray-900 mb-1">My Reviews</h2>

@@ -160,8 +160,8 @@ export default function ProductPage(){
           />
           <AppNavBar />
 
-          <Container className="px-12 mt-12">
-            <Grid className="grid-cols-2 gap-4">
+          <Container className="px-4 sm:px-6 lg:px-12 mt-12">
+            <Grid className="grid-cols-1 md:grid-cols-2 gap-4">
               <Image src={"https://dummyimage.com/600x400/1a4d2e/fff"} alt={product.name} imgClass="w-full block" />
               <Flex className="flex-col gap-4">
                 <p className='max-w-l text-5xl font-semibold tracking-tight text-balance text-lime-700 sm:text-7xl'>{product.name}</p>

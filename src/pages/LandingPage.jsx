@@ -21,7 +21,7 @@ export default function LandingPage(){
         className="mt-8"
       />
 
-      <Grid classes='grid-cols-4 gap-4 px-12 mt-12'>
+      <Grid classes='grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 px-4 md:px-12 mt-12'>
         <ProductTile productName="Product Name" productImage="https://dummyimage.com/600x400/1a4d2e/fff" productPrice="100" productDescription="Product Description" productLink="https://google.com">
           <Chip text="Fertilizer"  bgClass={"bg-lime-200"} textClass={"text-lime-900 font-medium"}/>
           <Chip text="Organic"  bgClass={"bg-lime-200"} textClass={"text-lime-900 font-medium"}/>

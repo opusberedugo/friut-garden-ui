@@ -114,7 +114,7 @@ export default function EmailAuth() {
         onClose={() => setToastState(prev => ({ ...prev, open: false }))}
       />
 
-      <div className="w-full p-12 p-20">
+      <div className="w-full p-6 md:p-12 lg:p-20">
         {/* Header */}
         <Flex className="items-center justify-between mb-16">
           <a href="/login" className="text-sm text-gray-600 hover:text-gray-900">
@@ -152,7 +152,7 @@ export default function EmailAuth() {
             <p className="text-red-500 mb-4">{emailVerifyError}</p>
           )}
 
-          <Grid classes="grid-cols-4 grid items-center gap-4 mb-8">
+          <Grid classes="grid-cols-2 sm:grid-cols-4 grid items-center gap-4 mb-8">
             <OTPInput
               length={8}
               value={emailOtp}

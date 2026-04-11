@@ -42,9 +42,9 @@ export default function SearchPage(){
     return(
       <>
         <AppNavBar />
-        <Container className="px-12 mt-12">
-          <h2 className="mt-12 px-12 text-lg font-medium text-pretty text-forest-900 sm:text-xl">{`Search Results for "${query}" (${products.length})`}</h2>
-          <Grid className="grid-cols-4 gap-4 px-12 mt-6">
+        <Container className="px-4 sm:px-6 lg:px-12 mt-12">
+          <h2 className="mt-12 px-4 sm:px-6 lg:px-12 text-lg font-medium text-pretty text-forest-900 sm:text-xl">{`Search Results for "${query}" (${products.length})`}</h2>
+          <Grid className="grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-4 sm:px-6 lg:px-12 mt-6">
             {products.map((product) => (
               <ProductTile key={product._id}
                 productId={product._id}

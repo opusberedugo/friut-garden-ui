@@ -261,7 +261,7 @@ export default function NewUserAuth(){
         onClose={hideAlert}
         actions={[{ label: 'OK', onClick: hideAlert }]}
       />
-      <div className="p-20">
+      <div className="p-6 md:p-12 lg:p-20">
 
       <Flex className="flex items-center justify-between mb-16">
         <button type="button" onClick={() => navigate(-1)} className="text-sm text-gray-600 hover:text-gray-900 focus:outline-none" aria-label="Go Back">
@@ -295,12 +295,12 @@ export default function NewUserAuth(){
       {/* Slide container — both forms sit side by side; translateX drives the slide */}
       <div className="overflow-hidden w-full">
         <div
-          className="flex transition-transform duration-500 ease-in-out"
+          className="flex items-start transition-transform duration-500 ease-in-out"
           style={{ transform: `translateX(-${currentStep * 100}%)` }}
         >
 
           {/* ── Step 0: Email OTP ── */}
-          <div className="w-full flex-shrink-0 px-20">
+          <div className={`w-full flex-shrink-0 px-4 md:px-20 transition-all duration-500 ${currentStep === 0 ? 'opacity-100' : 'h-0 overflow-hidden opacity-0'}`}>
             <Form onSubmit={handleVerifyEmail}>
               <div className="mb-8">
                 <h1 className="text-2xl font-semibold text-gray-900 mb-2">Check your mail</h1>
@@ -315,7 +315,7 @@ export default function NewUserAuth(){
                 <p className="text-red-500 mb-4">{emailVerifyError}</p>
               )}
 
-              <Grid classes="grid-cols-4 grid items-center gap-4 mb-8">
+              <Grid classes="grid-cols-2 sm:grid-cols-4 grid items-center gap-4 mb-8">
                 <OTPInput
                   length={8}
                   value={emailOtp}
@@ -336,7 +336,7 @@ export default function NewUserAuth(){
           </div>
 
           {/* ── Step 1: Phone OTP ── */}
-          <div className="w-full flex-shrink-0 px-20">
+          <div className={`w-full flex-shrink-0 px-4 md:px-20 transition-all duration-500 ${currentStep === 1 ? 'opacity-100' : 'h-0 overflow-hidden opacity-0'}`}>
             <Form onSubmit={handleVerifyPhone}>
               <div className="mb-8">
                 <h1 className="text-2xl font-semibold text-gray-900 mb-2">Check your messages</h1>
@@ -351,7 +351,7 @@ export default function NewUserAuth(){
                 <p className="text-red-500 mb-4">{phoneVerifyError}</p>
               )}
 
-              <Grid classes="grid-cols-4 grid items-center gap-4 mb-8">
+              <Grid classes="grid-cols-2 sm:grid-cols-4 grid items-center gap-4 mb-8">
                 <OTPInput
                   length={8}
                   value={phoneOtp}
@@ -372,7 +372,7 @@ export default function NewUserAuth(){
           </div>
 
           {/* ── Step 2: User Preferences ── */}
-          <div className="w-full flex-shrink-0 px-20">
+          <div className={`w-full flex-shrink-0 px-4 md:px-20 transition-all duration-500 ${currentStep === 2 ? 'opacity-100' : 'h-0 overflow-hidden opacity-0'}`}>
             <div className="mb-8">
               <h1 className="text-2xl font-semibold text-gray-900 mb-2">User Preferences</h1>
               <p className="text-gray-600">Tell us a bit about yourself to personalise your experience.</p>

@@ -183,7 +183,7 @@ export default function CartPage() {
       />
 
       <AppNavBar />
-      <Grid className="grid-cols-5 ">
+      <Grid className="grid-cols-1 lg:grid-cols-5 ">
         <SideBar className="col-span-1">
           <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Cart" href="/profile" >Cart</SideBarLink>
           <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Wishlist" href="/profile/wishlist" >Wishlist</SideBarLink>
@@ -205,10 +205,10 @@ export default function CartPage() {
         </SideBar>
 
         {/* Cart Page Content */}
-        <Grid className="col-span-4 w-full grid grid-cols-3 gap-4 items-start px-8 mt-12">
+        <Grid className="col-span-1 lg:col-span-4 w-full grid grid-cols-1 lg:grid-cols-3 gap-4 items-start px-4 lg:px-8 mt-12">
              
           {/* Left Pane: Items */}
-          <CartCard className="col-span-2 border border-gray-100 bg-white h-auto p-8 rounded-[2rem] shadow-[0_4px_24px_rgba(0,0,0,0.02)]">
+          <CartCard className="col-span-1 lg:col-span-2 border border-gray-100 bg-white h-auto p-8 rounded-[2rem] shadow-[0_4px_24px_rgba(0,0,0,0.02)]">
             <div className="flex justify-between items-center mb-8">
               <div className="flex items-center gap-3">
                 <h2 className="text-[28px] font-medium text-gray-900 tracking-tight">Cart</h2>
@@ -276,7 +276,7 @@ export default function CartPage() {
           </CartCard>
 
           {/* Right Pane: Summary */}
-          <CartCard className="bg-[#F6F7F9] border border-[#F6F7F9] shadow-none xl:sticky xl:top-8 h-auto p-8 rounded-[2rem]">
+          <CartCard className="col-span-1 bg-[#F6F7F9] border border-[#F6F7F9] shadow-none xl:sticky xl:top-8 h-auto p-8 rounded-[2rem]">
             <h3 className="text-[17px] font-bold text-gray-900">Order Summary</h3>            
 
             <div className="mt-6 flex flex-col gap-1">

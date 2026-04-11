@@ -191,7 +191,7 @@ export default function PreferencesPage() {
     <>
       <Toast open={toast.open} message={toast.message} variant={toast.variant} onClose={() => setToast({ ...toast, open: false })} />
       <AppNavBar />
-      <Grid className="grid-cols-5 ">
+      <Grid className="grid-cols-1 md:grid-cols-5 ">
         <SideBar className="col-span-1">
           <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Cart" href="/profile" >Cart</SideBarLink>
           <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Wishlist" href="/profile/wishlist" >Wishlist</SideBarLink>
@@ -209,11 +209,11 @@ export default function PreferencesPage() {
         </SideBar>
 
         {/* Preferences Content */}
-        <Grid className="col-span-4 w-full px-12 mt-12 min-h-screen pt-8 pb-32">
+        <Grid className="col-span-1 md:col-span-4 w-full px-4 md:px-12 mt-12 min-h-screen pt-8 pb-32">
           <div className="max-w-4xl">
             <h2 className="text-[28px] font-bold text-gray-900 mb-8">My Preferences</h2>
 
-            <div className="w-full flex-shrink-0 px-20">
+            <div className="w-full flex-shrink-0 px-4 md:px-20">
               <div className="mb-8">
                 <h1 className="text-2xl font-semibold text-gray-900 mb-2">User Preferences</h1>
                 <p className="text-gray-600">Tell us a bit about yourself to personalise your experience.</p>

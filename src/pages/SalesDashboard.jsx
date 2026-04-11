@@ -34,7 +34,7 @@ export default function SalesDashboard() {
 
   return (
     <SellerLayout>
-      <div className="max-w-5xl px-12 pt-8 w-full">
+      <div className="max-w-5xl px-4 md:px-12 pt-8 w-full">
         <h2 className="text-[28px] font-bold text-gray-900 mb-1">Sales Dashboard</h2>
         <p className="text-gray-500 mb-8">Your live merchant overview — revenue, shipments, and community standing.</p>
 
@@ -45,7 +45,7 @@ export default function SalesDashboard() {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 mb-10">
             <StatCard
               label="Gross Revenue"
               value={`MUR ${(stats?.grossRevenue || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
