@@ -84,6 +84,10 @@ export default function EmailAuth() {
       })
 
       if (response.ok) {
+        const data = await response.json()
+        if (data.token) {
+          localStorage.setItem('fm_token', data.token);
+        }
         setEmailVerified(true)
         setEmailVerifyError('')
         showToast('success', 'Email verified successfully! Redirecting…')
@@ -110,7 +114,7 @@ export default function EmailAuth() {
         onClose={() => setToastState(prev => ({ ...prev, open: false }))}
       />
 
-      <div className="w-full max-w-lg mx-auto px-8 py-12">
+      <div className="w-full p-12 p-20">
         {/* Header */}
         <Flex className="items-center justify-between mb-16">
           <a href="/login" className="text-sm text-gray-600 hover:text-gray-900">

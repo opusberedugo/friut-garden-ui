@@ -95,10 +95,7 @@ function LogInPage() {
 
       if (response.ok) {
         console.log('Login Successful', data)
-        if (data.token) {
-          localStorage.setItem('fm_token', data.token);
-        }
-        showToast('success', 'Login successful! Please verify your email to continue.')
+        showToast('success', 'Login successful! Please check your email to continue.')
         setTimeout(() => navigate(`/email-authentication/${data.id}`), 1500)
       } else if (response.status === 404) {
         showAlert('error', 'Account not found', 'No account exists with that email address. Please check your email or sign up.')

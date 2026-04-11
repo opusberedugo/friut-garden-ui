@@ -13,20 +13,32 @@ import { NavLink } from 'react-router-dom';
  */
 export default function SidebarLink({ 
   to, 
+  href,
   icon, 
   children, 
   className = '', 
-  activeClassName = ''
+  activeClassName = '',
+  onClick
 }) {
   const defaultBaseClasses = "flex items-center px-4 py-3 mx-4 rounded-md transition-colors text-sm font-medium";
   const defaultInactiveClasses = "text-slate-500 hover:bg-slate-100/50 hover:text-slate-900";
   const defaultActiveClasses = "bg-blue-50 text-blue-600"; // Based on the reference image
 
+  const targetPath = to || href || '#';
+
+  const handleClick = (e) => {
+    if (onClick) {
+      e.preventDefault();
+      onClick(e);
+    }
+  };
+
   return (
     <NavLink 
-      to={to}
+      to={targetPath}
+      onClick={handleClick}
       className={({ isActive }) => 
-        `${defaultBaseClasses} ${isActive ? (activeClassName || defaultActiveClasses) : defaultInactiveClasses} ${className}`.trim()
+        onClick ? `${defaultBaseClasses} ${defaultInactiveClasses} cursor-pointer ${className}`.trim() : `${defaultBaseClasses} ${isActive ? (activeClassName || defaultActiveClasses) : defaultInactiveClasses} ${className}`.trim()
       }
     >
       {icon && (

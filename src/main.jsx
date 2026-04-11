@@ -12,7 +12,14 @@ import HomePage from './pages/HomePage.jsx'
 import ProductPage from './pages/ProductPage.jsx'
 import SearchPage from './pages/SearchPage.jsx'
 import CartPage from './pages/CartPage.jsx'
-// import ProfilePage from './pages/ProfilePage.jsx'
+import WishlistPage from './pages/Wishlist.jsx'
+import CheckoutPage from './pages/CheckoutPage.jsx'
+import OrdersPage from './pages/OrdersPage.jsx'
+import PreferencesPage from './pages/PreferencesPage.jsx'
+import SalesDashboard from './pages/SalesDashboard.jsx'
+import SalesProducts from './pages/SalesProducts.jsx'
+import SalesOrders from './pages/SalesOrders.jsx'
+import SalesReviews from './pages/SalesReviews.jsx'
 
 const router = createBrowserRouter([
   {
@@ -47,9 +54,41 @@ const router = createBrowserRouter([
     path: "/search",
     element: <SearchPage />
   },
-    {
+  {
     path: "/profile",
     element: <CartPage />
+  },
+  {
+    path: "/profile/wishlist",
+    element: <WishlistPage />
+  },
+  {
+    path: "/profile/orders",
+    element: <OrdersPage />
+  },
+  {
+    path: "/profile/preferences",
+    element: <PreferencesPage />
+  },
+  {
+    path: "/profile/sales/dashboard",
+    element: <SalesDashboard />
+  },
+  {
+    path: "/profile/sales/products",
+    element: <SalesProducts />
+  },
+  {
+    path: "/profile/sales/orders",
+    element: <SalesOrders />
+  },
+  {
+    path: "/profile/sales/reviews",
+    element: <SalesReviews />
+  },
+  {
+    path: "/checkout",
+    element: <CheckoutPage />
   },
 ])
 

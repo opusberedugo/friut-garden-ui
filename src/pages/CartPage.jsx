@@ -13,6 +13,7 @@ import PromoInput from '../components/ecommerce/PromoInput'
 import SummaryRow from '../components/ecommerce/SummaryRow'
 import UIButton from '../components/ui/Button'
 import Toast from '../components/feedback/Toast'
+import Alert from '../components/feedback/Alert'
 
 export default function CartPage() {
   const navigate = useNavigate();
@@ -116,9 +117,10 @@ export default function CartPage() {
     }
   };
 
-  const handleClearCart = async () => {
-    if(!window.confirm("Are you sure you want to clear your cart?")) return;
+  const [alertOpen, setAlertOpen] = useState(false);
 
+  const executeClearCart = async () => {
+    setAlertOpen(false);
     try {
       const token = localStorage.getItem('fm_token');
       const res = await fetch(`${apiURL}/clear-cart`, {
@@ -133,12 +135,29 @@ export default function CartPage() {
     }
   };
 
+  const handleClearCart = () => {
+    setAlertOpen(true);
+  };
+
   const subtotal = products.reduce((acc, p) => {
     const price = p.itemDetails?.price ? Number(p.itemDetails.price) : 0;
     return acc + (price * p.quantity);
   }, 0);
   const discount = 0;
   const total = subtotal - discount;
+
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem('fm_token');
+      if (token) {
+        await fetch(`${apiURL}/logout`, { method: "POST", headers: { 'Authorization': `Bearer ${token}` } });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    localStorage.removeItem('fm_token');
+    window.location.href = "/login";
+  };
 
   return (
     <>
@@ -148,24 +167,41 @@ export default function CartPage() {
         variant={toast.variant} 
         onClose={() => setToast({ ...toast, open: false })} 
       />
+      
+      <Alert 
+        open={alertOpen}
+        variant="warning"
+        title="Clear Cart"
+        message="Are you sure you want to completely clear your cart? This action cannot be undone."
+        backdrop={true}
+        blur={true}
+        onClose={() => setAlertOpen(false)}
+        actions={[
+          { label: "Cancel", onClick: () => setAlertOpen(false), secondary: true },
+          { label: "Clear Cart", onClick: executeClearCart }
+        ]}
+      />
+
       <AppNavBar />
       <Grid className="grid-cols-5 ">
         <SideBar className="col-span-1">
-          <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Cart" href="/cart" >Cart</SideBarLink>
-          <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Wishlist" href="/wishlist" >Wishlist</SideBarLink>
-          <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Preferences" href="/preferences" >Preferences</SideBarLink>
-          <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Orders" href="/orders" >Orders</SideBarLink>
+          <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Cart" href="/profile" >Cart</SideBarLink>
+          <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Wishlist" href="/profile/wishlist" >Wishlist</SideBarLink>
+          <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Preferences" href="/profile/preferences" >Preferences</SideBarLink>
+          <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Orders" href="/profile/orders" >Orders</SideBarLink>
 
           <SidebarDivider/>
 
-          <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Sales Dashboard" href="/sales-dashboard" >Sales Dashboard</SideBarLink>
-          <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Products" href="/sales-products" >Products</SideBarLink>
-          <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Orders" href="/sales-orders" >Orders</SideBarLink>
-          <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Reviews" href="/sales-reviews" >Reviews</SideBarLink>
+          <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Sales Dashboard" href="/profile/sales/dashboard" >Sales Dashboard</SideBarLink>
+          <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Products" href="/profile/sales/products" >My Products</SideBarLink>
+          <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Orders" href="/profile/sales/orders" >My Orders</SideBarLink>
+          <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Reviews" href="/profile/sales/reviews" >My Reviews</SideBarLink>
 
           <SidebarDivider/>
+
           <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Profile" href="/profile" >Profile Settings</SideBarLink>
           <SideBarLink className="text-forest-600 bg-transparent hover:bg-transparent hover:text-lime-400" text="Settings" href="/settings" >Account Settings</SideBarLink>
+          <SideBarLink className="text-red-500 bg-transparent hover:bg-transparent hover:text-red-600" text="Log Out" onClick={handleLogout} >Log Out</SideBarLink>
         </SideBar>
 
         {/* Cart Page Content */}
@@ -244,15 +280,15 @@ export default function CartPage() {
             <h3 className="text-[17px] font-bold text-gray-900">Order Summary</h3>            
 
             <div className="mt-6 flex flex-col gap-1">
-              <SummaryRow label="Subtotal" value={`$${subtotal.toFixed(2)}`} />
-              <SummaryRow label="Discount" value={`-$${discount.toFixed(2)}`} />
-              <SummaryRow label="Total" value={`$${total.toFixed(2)}`} isTotal />
+              <SummaryRow label="Subtotal" value={`MUR ${subtotal.toFixed(2)}`} />
+              <SummaryRow label="Discount" value={`-MUR ${discount.toFixed(2)}`} />
+              <SummaryRow label="Total" value={`MUR ${total.toFixed(2)}`} isTotal />
             </div>
 
             <UIButton 
               text="Continue to checkout" 
-              className="w-full bg-[#0A0D14] text-white py-4 mt-6 rounded-[1rem] font-medium hover:bg-black transition-colors shadow-md disabled:bg-gray-400 disabled:cursor-not-allowed"
-              onClick={() => alert("Checkout flow is not yet implemented!")}
+              className="w-full bg-forest-500 text-white py-4 mt-6 rounded-[1rem] font-medium hover:bg-lime-700 transition-colors shadow-md disabled:bg-gray-400 disabled:cursor-not-allowed"
+              onClick={() => navigate("/checkout")}
               disabled={products.length === 0}
             />
           </CartCard>
